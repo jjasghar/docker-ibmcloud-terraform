@@ -1,0 +1,21 @@
+- name: Copy Dockerfile
+  copy: 
+    src: '../files/Dockerfile' 
+    dest: '/tmp/Dockerfile'
+    mode: '0644'
+
+- name: Copy terraformrc
+  copy: 
+    src: '../files/terraformrc' 
+    dest: '/tmp/terraformrc'
+    mode: '0644'
+
+- name: Build the image container
+  docker_image:
+    build:
+      path: '/tmp/'
+      pull: no
+      nocache: yes
+    name: jjasghar/ibmcloud-tf
+    tag: latest
+    source: build

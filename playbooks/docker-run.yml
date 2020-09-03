@@ -1,0 +1,39 @@
+# create-or-verify the working directory
+- name: create-or-verify that the docker mount dir is there
+  file:
+    path: ~/dockermount
+    state: directory
+    owner: admini
+    group: admini
+    mode: '0755'
+
+# delete the state file if it's there
+- name: delete the terraform state file
+  file:
+    path: ~/dockermount/terraform.tfstate
+    state: absent
+
+# copy in the terraform plan
+- name: Copy in the terraform plan
+  template:
+    src: ../templates/plan.tf
+    dest: ~/dockermount/
+    owner: admini
+    group: admini
+    mode: '0755'
+
+- name: Run the terraform plan
+  docker_container:	
+    name: terraform-create
+    image: "jjasghar/ibmcloud-tf:latest"
+    volumes:
+      - ~/dockermount:/mnt/ 
+    command: terraform init
+        
+- name: Run the terraform plan
+  docker_container:	
+    name: terraform-create
+    image: "jjasghar/ibmcloud-tf:latest"
+    volumes:
+      - ~/dockermount:/mnt/ 
+    command: terraform apply -auto-approve

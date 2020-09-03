@@ -1,0 +1,15 @@
+---
+- name: Create some k8s clusters on IBM Cloud
+  hosts: all
+
+  tasks:
+
+    - name: Fetch the variables from var file
+      include_vars:
+        file: ../vars/main.yml
+
+    - name: include the docker-build tasks
+      include: docker-build.yml
+
+    - name: include the docker-run tasks
+      include: docker-run.yml
